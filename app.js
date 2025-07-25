@@ -73,4 +73,22 @@ app.delete("/books/:id", async (req, res)=>{
   }catch(err){
     res.status(500).json({"error" : "Failed to delete data!"})
   }
+});
+
+app.patch("/books/:id", async (req, res)=>{
+  try{
+    const id = req.params.id;
+    const updates = req.body;
+    //check if id is valid
+    if(!ObjectId.isValid(id)) res.status(400).json({"error" : "Invalid ID"});
+
+    const books = db.collection("books");
+    await books.updateOne(
+      {"_id": new ObjectId(id)},
+      {$set: updates}
+    );
+    res.status(200).json({"Message" : "Succesfully updated the field!"})
+  }catch(err){
+    res.status(500).json({"error" : "Failed to update data!"})
+  }
 })
