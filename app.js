@@ -4,6 +4,7 @@ const { ObjectId } = require("mongodb");
 
 // INITIALISE APP
 const app = express();
+app.use(express.json());
 
 //CONNECT TO DATABASE
 let db
