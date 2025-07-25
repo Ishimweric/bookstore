@@ -11,6 +11,7 @@ const connectToDB = async (cb)=>{
   try{
     client = await MongoClient.connect(uri);
     dbConnection = client.db();
+    console.log("Successfully connected to db!")
     return cb();
   }catch(err){
     console.error("Unable to connect: ",err);
