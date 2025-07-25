@@ -53,8 +53,8 @@ app.post("/books", async (req, res)=>{
   try{
     const book = req.body;
     const books = db.collection("books");
-    await books.insertOne(book);
-    res.status(201); // succesfully inserted data
+    const result = await books.insertOne(book);
+    res.status(201).json(result); // succesfully inserted data
   }catch(err){
     res.status(500).json({"error" : "Unable to add data!"})
   }
