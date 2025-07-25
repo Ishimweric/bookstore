@@ -48,3 +48,14 @@ app.get("/books/:id",async (req, res)=>{
     res.status(500).json({"error":"Could not fetch data!"});
   }
 });
+
+app.post("/books", async (req, res)=>{
+  try{
+    const book = req.body;
+    const books = db.collection("books");
+    await books.insertOne(book);
+    res.status(201); // succesfully inserted data
+  }catch(err){
+    res.status(500).json({"error" : "Unable to add data!"})
+  }
+})
