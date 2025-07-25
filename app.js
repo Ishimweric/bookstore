@@ -22,10 +22,18 @@ connectToDB((err)=>{
 });
 
 // ROUTES FOR REQUEST HANDLIND
+
 app.get("/books",async (req, res)=>{
   try{
     const books = db.collection("books");
-    const getBooks = await books.find({}).sort({"author":1}).toArray(); // get the cursor but not the actual array
+
+    // define pagination variables
+    const page = req.query.page || 1;
+    const limit = req.query.limit || 2;
+    const skip = (page - 1) * limit;
+    const totalPages = await books.countDocuments({}); // not needed just for reference
+
+    const getBooks = await books.find({}).sort({"author":1}).skip(skip).limit(limit).toArray(); // get the cursor but not the actual array
     res.status(200).json({getBooks}); //ok
   }catch(err){
     res.status(500).json({"error": "Could not fetch data!"}); //server error
