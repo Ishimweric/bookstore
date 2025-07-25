@@ -1,7 +1,6 @@
 const express = require("express");
 const {connectToDB, getDB} = require("./db");
 const { ObjectId } = require("mongodb");
-
 // INITIALISE APP
 const app = express();
 app.use(express.json());

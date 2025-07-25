@@ -1,7 +1,7 @@
-// STORE DATABASE CONNECTION CODES
-
+// STORE DATABASE CONNECTION CODE
+require("dotenv").config();
 // get mongo client
-const uri = "mongodb://localhost:27017/bookstore";
+const uri = process.env.DATABASE_URI;
 const {MongoClient} = require("mongodb");
 
 //connect to my local database
