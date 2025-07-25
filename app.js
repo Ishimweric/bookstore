@@ -58,4 +58,19 @@ app.post("/books", async (req, res)=>{
   }catch(err){
     res.status(500).json({"error" : "Unable to add data!"})
   }
+});
+
+app.delete("/books/:id", async (req, res)=>{
+  try{
+    const id = req.params.id;
+
+    //check if id is valid
+    if(!ObjectId.isValid(id)) res.status(400).json({"error" : "Inavlid ID"});
+
+    const books = db.collection("books");
+    await books.deleteOne({"_id" : new ObjectId(id)});
+    res.status(200).json({"Message":"Book successfuly deleted"});
+  }catch(err){
+    res.status(500).json({"error" : "Failed to delete data!"})
+  }
 })
