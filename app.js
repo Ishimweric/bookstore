@@ -1,5 +1,6 @@
 const express = require("express");
 const {connectToDB, getDB} = require("./db");
+const { ObjectId } = require("mongodb");
 
 // INITIALISE APP
 const app = express();
@@ -13,6 +14,9 @@ connectToDB((err)=>{
       console.log("SERVER RUNNING AT PORT 3500");
     });
     db = getDB();
+  }else{
+    console.error("Failed to cinnect to db: ",err)
+    process.exit(1);
   }
 });
 
@@ -23,6 +27,23 @@ app.get("/books",async (req, res)=>{
     const getBooks = await books.find({}).sort({"author":1}).toArray(); // get the cursor but not the actual array
     res.status(200).json({getBooks}); //ok
   }catch(err){
-    res.status(500).json({"error": "Could not fetch data!"});
+    res.status(500).json({"error": "Could not fetch data!"}); //server error
+  }
+});
+
+app.get("/books/:id",async (req, res)=>{
+  try{
+    const id = req.params.id;
+
+    // check if the id is valid
+    if (!ObjectId.isValid(id)){
+      res.status(400).json({"error" : "invalid id"})
+    }
+    
+    const books = db.collection("books");
+    const getBook = await books.findOne({"_id" : new ObjectId(id)});
+    res.status(200).json({getBook});
+  }catch(err){
+    res.status(500).json({"error":"Could not fetch data!"});
   }
 });
